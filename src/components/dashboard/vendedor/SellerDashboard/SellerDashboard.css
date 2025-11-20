@@ -1,0 +1,1 @@
+.seller-dashboard { display: grid; gap: 2rem; grid-template-columns: 1fr; } @media(min-width: 768px){ .seller-dashboard{ grid-template-columns: 1fr 1fr; } }

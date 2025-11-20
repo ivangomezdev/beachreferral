@@ -1,0 +1,2 @@
+'use client'; import React from 'react'; import Card from '@/components/ui/Card/Card'; import './TopSellersList.css';
+const TopSellersList = () => (<Card title="Top Sellers"><ul><li>Seller A - $15k</li><li>Seller B - $10k</li></ul></Card>); export default TopSellersList;

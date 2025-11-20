@@ -1,0 +1,2 @@
+'use client'; import React from 'react'; import Card from '@/components/ui/Card/Card'; import './AllSalesTable.css';
+const AllSalesTable = () => (<Card title="All Sales"><table className="sales-table"><thead><tr><th>Seller</th><th>Amount</th><th>Status</th></tr></thead><tbody><tr><td>user@test.com</td><td>$100</td><td>Pending</td></tr></tbody></table></Card>); export default AllSalesTable;

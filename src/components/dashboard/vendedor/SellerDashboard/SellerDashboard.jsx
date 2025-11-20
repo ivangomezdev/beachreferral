@@ -1,0 +1,2 @@
+'use client'; import React from 'react'; import SalesForm from '../SalesForm/SalesForm'; import './SellerDashboard.css';
+const SellerDashboard = () => (<div className="seller-dashboard"><SalesForm /><div>Stats Placeholder</div></div>); export default SellerDashboard;

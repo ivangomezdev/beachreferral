@@ -1,0 +1,2 @@
+'use client'; import React from 'react'; import Card from '@/components/ui/Card/Card'; import './MetricsSummary.css';
+const MetricsSummary = () => (<Card title="Metrics"><div className="metrics"><div>Total: $50k</div><div>Pending: $5k</div></div></Card>); export default MetricsSummary;

@@ -1,0 +1,2 @@
+'use client'; import React from 'react'; import Button from '@/components/ui/Button/Button'; import './ExcelExportButton.css';
+const ExcelExportButton = () => (<div className="excel-btn"><Button onClick={()=>alert('Download XLSX')}>Export Excel</Button></div>); export default ExcelExportButton;
