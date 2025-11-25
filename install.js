@@ -1,5 +1,5 @@
-const fs = require('fs');
-const path = require('path');
+const fs = require('fs')
+const path = require('path')
 
 // --- DEFINICIÓN DE ARCHIVOS Y CONTENIDO ---
 const files = {
@@ -272,29 +272,29 @@ const MetricsSummary = () => (<Card title="Metrics"><div className="metrics"><di
 const TopSellersList = () => (<Card title="Top Sellers"><ul><li>Seller A - $15k</li><li>Seller B - $10k</li></ul></Card>); export default TopSellersList;
 `,
   'src/components/dashboard/owner/TopSellersList/TopSellersList.css': `ul { list-style: none; } li { padding: 0.5rem 0; border-bottom: 1px solid var(--color-border); }`
-};
+}
 
 // --- EJECUCIÓN DEL SCRIPT ---
-async function createProject() {
-  console.log('🚀 Iniciando instalación de archivos...');
+async function createProject () {
+  console.log('🚀 Iniciando instalación de archivos...')
 
   for (const [filePath, content] of Object.entries(files)) {
-    const absolutePath = path.join(process.cwd(), filePath);
-    const dir = path.dirname(absolutePath);
+    const absolutePath = path.join(process.cwd(), filePath)
+    const dir = path.dirname(absolutePath)
 
     // Crear directorio si no existe
     if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
+      fs.mkdirSync(dir, { recursive: true })
     }
 
     // Escribir archivo
-    fs.writeFileSync(absolutePath, content.trim());
-    console.log(`✅ Creado: ${filePath}`);
+    fs.writeFileSync(absolutePath, content.trim())
+    console.log(`✅ Creado: ${filePath}`)
   }
 
-  console.log('\n✨ ¡Instalación completada! ✨');
-  console.log('Recuerda instalar Firebase si no lo has hecho:');
-  console.log('npm install firebase');
+  console.log('\n✨ ¡Instalación completada! ✨')
+  console.log('Recuerda instalar Firebase si no lo has hecho:')
+  console.log('npm install firebase')
 }
 
-createProject();
+createProject()

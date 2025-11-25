@@ -1,1 +1,231 @@
-.sales-table { width: 100%; border-collapse: collapse; } th, td { padding: 0.5rem; border-bottom: 1px solid var(--color-border); text-align: left; }
+/* --- Estilos Generales --- */
+.table-container {
+  overflow-x: auto;
+}
+
+/* --- SECCIÓN DE FILTROS --- */
+.filters-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* Grupo de botones de fecha */
+.date-buttons {
+  display: flex;
+  background-color: #f1f3f5;
+  padding: 4px;
+  border-radius: 8px;
+  gap: 4px;
+}
+
+.date-buttons button {
+  background: transparent;
+  border: none;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--color-text);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.date-buttons button:hover {
+  background-color: rgba(0,0,0,0.05);
+}
+
+.date-buttons button.active {
+  background-color: white;
+  color: var(--color-primary);
+  font-weight: 700;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+}
+
+/* Grupo de Inputs (Buscador y Select) */
+.filter-group.inputs {
+  display: flex;
+  gap: 0.5rem;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.search-input, .status-select {
+  padding: 8px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.search-input {
+  min-width: 150px;
+}
+
+.status-select {
+  cursor: pointer;
+  background-color: white;
+}
+
+/* --- TABLA --- */
+.sales-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.sales-table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  color: var(--color-secondary);
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  padding: 1rem;
+  border-bottom: 2px solid var(--color-border);
+  text-align: left;
+}
+
+.sales-table td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: middle;
+  color: var(--color-text);
+}
+
+.clickable-row {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.clickable-row:hover {
+  background-color: #f8f9fa;
+}
+
+.seller-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.seller-name {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--color-primary);
+}
+
+.referred-by {
+  font-size: 0.8rem;
+  color: #888;
+  font-weight: 500;
+}
+
+.amount-cell {
+  font-weight: bold;
+  color: var(--color-text);
+}
+
+/* Status Badges */
+.status-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-block;
+  text-transform: capitalize;
+}
+.status-pending { background-color: #fff3cd; color: #856404; }
+.status-completed { background-color: #d4edda; color: #155724; }
+.status-cancelled { background-color: #f8d7da; color: #721c24; }
+.status-default { background-color: #e2e3e5; color: #383d41; }
+
+.sale-details p {
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+}
+
+/* =========================================
+   VISTA MÓVIL
+   ========================================= */
+@media (max-width: 768px) {
+  /* Ajuste de Filtros en móvil */
+  .filters-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+  
+  .date-buttons {
+    justify-content: space-between;
+    width: 100%;
+  }
+  
+  .date-buttons button {
+    flex: 1;
+  }
+
+  .filter-group.inputs {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .search-input, .status-select {
+    width: 100%;
+  }
+
+  /* Tabla Móvil */
+  .sales-table thead { display: none; }
+  .sales-table, .sales-table tbody, .sales-table tr, .sales-table td {
+    display: block; width: 100%;
+  }
+
+  .clickable-row {
+    background-color: var(--color-card-bg);
+    margin-bottom: 1rem;
+    border-radius: 12px;
+    border: 1px solid var(--color-border);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    padding: 1rem;
+  }
+  .clickable-row:active { transform: scale(0.98); background-color: #f0f0f0; }
+
+  .sales-table td {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: right;
+  }
+  .sales-table td:last-child { border-bottom: none; }
+
+  .sales-table td[data-label="Vendedor"] {
+    order: 1;
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.75rem;
+    text-align: left;
+  }
+  
+  .sales-table td[data-label="Vendedor"] .seller-info {
+    flex-direction: column; 
+    align-items: flex-start;
+  }
+
+  .sales-table td[data-label="Estado"] { order: 2; }
+
+  .sales-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: var(--color-secondary);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    margin-right: 1rem;
+  }
+  .sales-table td[data-label="Vendedor"]::before { display: none; }
+  
+  .amount-cell { font-size: 1.1rem; }
+}

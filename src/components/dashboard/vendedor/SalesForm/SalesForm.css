@@ -1,1 +1,87 @@
-.sales-form { display: grid; gap: 1rem; }
+.sales-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%; /* Asegura que ocupe todo el ancho disponible */
+}
+
+/* Por defecto (móvil y pantallas < 650px): 1 sola columna */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  width: 100%;
+  align-items: centers;
+}
+
+/* Pantallas Escritorio/Tablet Grande (>= 650px): 2 columnas */
+@media (min-width: 650px) {
+  .form-row {
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+  }
+}
+
+/* Estilos de inputs y selects */
+.input-group {
+  width: 100%;
+}
+
+.input-group select,
+.input-group input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background-color: white;
+  font-family: inherit;
+  font-size: 0.95rem;
+  box-sizing: border-box; /* Vital para que el padding no rompa el ancho */
+}
+
+.input-group select:focus,
+.input-group input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+/* Checkbox container */
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  min-height: 50px; /* Altura mínima para alinearse con inputs vecinos */
+  margin-top: 0.5rem;
+}
+
+.checkbox-container label {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+
+
+
+.checkbox-container label:hover {
+  background-color: #f8f9fa;
+}
+
+.checkbox-container input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  cursor: pointer;
+}
+
+/* En móviles, separar un poco más el checkbox si queda apilado */
+@media (max-width: 649px) {
+  .checkbox-container {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+  }
+}

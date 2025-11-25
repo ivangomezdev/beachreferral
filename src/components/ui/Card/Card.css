@@ -1,3 +1,22 @@
-.card { background: var(--color-card-bg); border: 1px solid var(--color-border); border-radius: 8px; margin-bottom: 1rem; }
-.card__header { padding: 1rem; border-bottom: 1px solid var(--color-border); }
-.card__body { padding: 1rem; }
+.card {
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+.card__header {
+  padding: 1rem;
+  border-bottom: 1px solid var(--color-border);
+}
+.card__body {
+  padding: 1rem;
+}
+
+
+@media(max-width:492px){
+    .card{
+        max-width: 430px;
+        min-width: 270px;
+        width: 100%;
+    }
+}
