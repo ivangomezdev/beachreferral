@@ -1,4 +1,50 @@
-.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center; z-index: 1000; }
-.modal-content { background: white; width: 90%; max-width: 500px; border-radius: 8px; }
-.modal-header { display: flex; justify-content: space-between; padding: 1rem; border-bottom: 1px solid var(--color-border); }
-.modal-body { padding: 1rem; }
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  width: 90%;
+  max-width: 500px;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh; /* Importante para que el scroll interno funcione si el contenido es largo */
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* --- ESTILOS DEL BOTÓN DE CIERRE (X) --- */
+.modal-header button {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  font-weight: bold; /* Para que se vea más gruesito */
+  color: #333;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0 0.5rem;
+  transition: color 0.2s;
+}
+
+.modal-header button:hover {
+  color: var(--color-error); /* Opcional: cambia a rojo al pasar el mouse */
+}
+
+.modal-body {
+  padding: 1rem;
+  overflow-y: auto; /* Permite scroll si el contenido es muy largo */
+}   
