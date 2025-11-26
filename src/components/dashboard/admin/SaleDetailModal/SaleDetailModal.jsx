@@ -1,3 +1,5 @@
+/* File: src/components/dashboard/admin/SaleDetailModal/SaleDetailModal.jsx
+*/
 'use client';
 import React, { useState, useEffect } from 'react';
 import { doc, updateDoc } from 'firebase/firestore';
@@ -32,7 +34,7 @@ const SaleDetailModal = ({ sale, isOpen, onClose, onUpdate }) => {
         observation: sale.observation || '',
         
         // Datos Editables que vienen del vendedor
-        quantity: sale.quantity || 1, // Se inicializa con el valor original
+        quantity: sale.quantity || 1, 
         totalAmount: sale.totalAmount || sale.amount || '', 
       });
     }
@@ -82,7 +84,7 @@ const SaleDetailModal = ({ sale, isOpen, onClose, onUpdate }) => {
           folio: formData.folio,
           wristbandColor: formData.wristbandColor,
           paymentProofUrl: formData.paymentProofUrl,
-          quantity: parseInt(formData.quantity) || 0, // Aquí se actualiza la cantidad en la BD
+          quantity: parseInt(formData.quantity) || 0,
           totalAmount: parseFloat(formData.totalAmount) || 0,
           observation: '' 
         };
@@ -107,10 +109,11 @@ const SaleDetailModal = ({ sale, isOpen, onClose, onUpdate }) => {
 
   if (!sale) return null;
 
-  // Lógica para mostrar el anticipo en Detalles Originales
-  const anticipoMonto = sale.paymentType === 'Pago Anticipo' ? (100 * sale.quantity) : 0;
-  const anticipoTexto = sale.paymentType === 'Pago Anticipo' 
-    ? `$${anticipoMonto} (Sí)` 
+  // Lógica de visualización para Anticipo
+  const hasAnticipo = sale.paymentType === 'Pago Anticipo';
+  const calculatedAnticipo = hasAnticipo ? (sale.quantity * 100) : 0;
+  const anticipoDisplay = hasAnticipo 
+    ? `Sí - $${calculatedAnticipo.toLocaleString()}` 
     : 'No';
 
   return (
@@ -125,10 +128,18 @@ const SaleDetailModal = ({ sale, isOpen, onClose, onUpdate }) => {
             <div className="info-item"><strong>Fecha:</strong> {sale.date}</div>
             <div className="info-item"><strong>Ciudad:</strong> {sale.city}</div>
             <div className="info-item"><strong>Pax Original:</strong> {sale.quantity}</div>
-            <div className="info-item"><strong>Referido:</strong> {sale.referredBy || 'N/A'}</div>
-            {/* Aquí mostramos el cálculo del anticipo basado en la data original */}
-            <div className="info-item" style={{color: anticipoMonto > 0 ? 'green' : 'inherit'}}>
-                <strong>Anticipo:</strong> {anticipoTexto}
+            {/* Mostramos Reserva en lugar de Referido o Concierge si prefieres, aquí mantengo el dato original */}
+            <div className="info-item"><strong>Concierge:</strong> {sale.referredBy || 'N/A'}</div>
+            <div className="info-item"><strong>Reserva para:</strong> {sale.reservationFor || 'N/A'}</div>
+
+            {/* Nuevo campo de Anticipo con lógica Sí/No */}
+            <div className="info-item" style={{color: hasAnticipo ? 'green' : 'inherit'}}>
+                <strong>Anticipo:</strong> {anticipoDisplay}
+            </div>
+
+            {/* Nuevo campo de Balance (Deuda) */}
+            <div className="info-item" style={{color: '#dc3545'}}>
+                <strong>Debe (Balance):</strong> ${parseFloat(sale.amount || 0).toLocaleString()}
             </div>
           </div>
         </div>
@@ -169,7 +180,7 @@ const SaleDetailModal = ({ sale, isOpen, onClose, onUpdate }) => {
             <>
               <div className="admin-grid">
                 
-                {/* Pax Editable (Actualiza la BD) */}
+                {/* Pax Editable */}
                 <div className="form-group">
                     <label>Personas (Pax)</label>
                     <input 
@@ -181,7 +192,7 @@ const SaleDetailModal = ({ sale, isOpen, onClose, onUpdate }) => {
                     />
                 </div>
 
-                {/* Hora Editable (Default: Actual) */}
+                {/* Hora Editable */}
                 <div className="form-group">
                     <label>Hora de Ingreso</label>
                     <input 

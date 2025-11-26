@@ -19,7 +19,7 @@ export default function LoginPage() {
   return (
     <main className={styles.loginPage}>
       <div className={styles.loginPage__container}>
-        <h1>Sales Tracker</h1>
+        <img style={{width:"170px"}} src='https://i.imgur.com/NqvR5G3.png'/>
         <LoginForm />
       </div>
     </main>

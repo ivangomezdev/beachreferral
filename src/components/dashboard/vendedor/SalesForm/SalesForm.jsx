@@ -1,3 +1,6 @@
+/* File: src/components/dashboard/vendedor/SalesForm/SalesForm.jsx
+   Type: uploaded file modification
+*/
 'use client';
 import React, { useState, useEffect } from 'react';
 import { collection, addDoc } from 'firebase/firestore';
@@ -7,7 +10,7 @@ import Swal from 'sweetalert2';
 import Input from '@/components/ui/Input/Input';
 import Button from '@/components/ui/Button/Button';
 import Card from '@/components/ui/Card/Card';
-import './SalesForm.css';
+import'./SalesForm.css';
 
 const SalesForm = () => {
   const { user } = useAuth();
@@ -21,14 +24,15 @@ const SalesForm = () => {
     date: '',
     city: '',
     quantity: 1,
-    referredBy: '', // Este valor se calculará al enviar
-    amount: '',
+    referredBy: '', // Ahora se visualiza como "Concierge"
+    reservationFor: '', // Nuevo campo
+    amount: '', // Balance
     paymentMethod: 'Efectivo'
   };
 
   const [formData, setFormData] = useState(initialState);
 
-  // Efecto para pre-llenar referido si está en modo "me"
+  // Efecto para pre-llenar referido (Concierge) si está en modo "me"
   useEffect(() => {
     if (referralMode === 'me' && user) {
       setFormData(prev => ({ ...prev, referredBy: user.email }));
@@ -48,7 +52,7 @@ const SalesForm = () => {
       await addDoc(collection(db, "sales"), {
         ...formData,
         paymentType: finalPaymentType,
-        amount: parseFloat(formData.amount),
+        amount: parseFloat(formData.amount), // Balance pendiente
         quantity: parseInt(formData.quantity),
         sellerEmail: user.email,
         sellerId: user.uid,
@@ -83,6 +87,9 @@ const SalesForm = () => {
     const { id, value } = e.target;
     setFormData(prev => ({ ...prev, [id]: value }));
   };
+
+  // Cálculo visual del anticipo (100 * pax)
+  const anticipoValue = (parseInt(formData.quantity) || 0) * 100;
 
   return (
     <Card title="Registrar Nueva Venta">
@@ -132,10 +139,10 @@ const SalesForm = () => {
           </div>
         </div>
 
-        {/* Fila 3: Referido Por (Lógica Especial) */}
+        {/* Fila 3: Concierge y Reserva Para */}
         <div className="form-row">
           <div className="input-group">
-            <label>Referido por</label>
+            <label>Concierge</label> {/* Cambiado de 'Referido por' */}
             <select 
               value={referralMode} 
               onChange={(e) => setReferralMode(e.target.value)}
@@ -149,15 +156,28 @@ const SalesForm = () => {
               <input
                 type="text"
                 id="referredBy"
-                placeholder="Nombre del referido"
+                placeholder="Nombre del Concierge"
                 value={formData.referredBy}
                 onChange={handleChange}
                 required
-                className="mt-2" // Pequeño margen superior si usas Tailwind o similar, sino el CSS lo maneja
+                className="mt-2" 
               />
             )}
           </div>
 
+          <Input 
+            label="Reserva para" 
+            id="reservationFor" 
+            type="text" 
+            placeholder="Nombre del titular"
+            value={formData.reservationFor} 
+            onChange={handleChange} 
+            required 
+          />
+        </div>
+
+        {/* Fila 4: Checkbox Anticipo y Balance */}
+        <div className="form-row">
            {/* Checkbox Tipo de Cobro */}
            <div className="input-group checkbox-container">
             <label style={{cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px'}}>
@@ -168,21 +188,20 @@ const SalesForm = () => {
                 style={{width: '20px', height: '20px'}} 
               />
               <span style={{fontWeight: 'bold'}}>
-                {isAnticipo ? 'Pago Anticipo' : 'No Pago Anticipo'}
+                {isAnticipo ? `Pago Anticipo ($${anticipoValue})` : 'No Pago Anticipo'}
               </span>
             </label>
           </div>
-        </div>
 
-        {/* Fila 4: Balance (Antes Monto) */}
-        <Input 
-          label="Balance" 
-          id="amount" 
-          type="number" 
-          value={formData.amount} 
-          onChange={handleChange} 
-          required 
-        />
+          <Input 
+            label="Balance (Lo que falta pagar)" 
+            id="amount" 
+            type="number" 
+            value={formData.amount} 
+            onChange={handleChange} 
+            required 
+          />
+        </div>
 
         <Button type="submit" disabled={loading}>
           {loading ? 'Guardando...' : 'Registrar Venta'}

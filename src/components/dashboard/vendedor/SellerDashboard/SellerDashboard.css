@@ -8,12 +8,7 @@
 }
 
 /* En pantallas grandes, ponemos el formulario a la izquierda y el historial a la derecha */
-@media (min-width: 900px) {
-  .seller-dashboard {
-    grid-template-columns: 400px 1fr; /* Formulario fijo, Tabla flexible */
-    align-items: start;
-  }
-}
+
 
 /* Si prefieres 50% y 50% en escritorio, usa esto en su lugar:
 @media (min-width: 900px) {

@@ -4,12 +4,13 @@ import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import Card from '@/components/ui/Card/Card';
 import './MetricsSummary.css';
-
+import DateRangeIcon from '@mui/icons-material/DateRange';
 const MetricsSummary = () => {
-  const [metrics, setMetrics] = useState({ total: 0, pending: 0 });
-  const [allSales, setAllSales] = useState([]); // Guardamos todas las ventas aquí
+  // Cambiamos el estado para reflejar Ganancia Real (Aprobadas) y Por Cobrar (Pendientes)
+  const [metrics, setMetrics] = useState({ totalEarned: 0, pending: 0 });
+  const [allSales, setAllSales] = useState([]); 
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState('all'); // 'day', 'week', 'month', 'all'
+  const [filter, setFilter] = useState('all'); 
 
   // 1. Cargar datos UNA sola vez
   useEffect(() => {
@@ -34,9 +35,8 @@ const MetricsSummary = () => {
       const now = new Date();
       
       const filtered = allSales.filter(sale => {
-        // Asumimos que sale.date viene como "YYYY-MM-DD" del input type="date"
         if (!sale.date) return false; 
-        const saleDate = new Date(sale.date + 'T00:00:00'); // Forzar hora local/neutra para evitar desfases
+        const saleDate = new Date(sale.date + 'T00:00:00'); 
 
         if (filter === 'all') return true;
 
@@ -46,7 +46,7 @@ const MetricsSummary = () => {
 
         if (filter === 'week') {
           const startOfWeek = new Date(now);
-          startOfWeek.setDate(now.getDate() - now.getDay()); // Asume Domingo como inicio, ajusta si es Lunes
+          startOfWeek.setDate(now.getDate() - now.getDay()); 
           startOfWeek.setHours(0, 0, 0, 0);
           return saleDate >= startOfWeek;
         }
@@ -60,18 +60,25 @@ const MetricsSummary = () => {
       });
 
       // Calcular métricas sobre el array FILTRADO
-      let totalSum = 0;
+      let earnedSum = 0;
       let pendingSum = 0;
 
-      filtered.forEach((data) => {
-        const amount = parseFloat(data.amount) || 0;
-        totalSum += amount;
-        if (data.status === 'Pending') {
+      filtered.forEach((sale) => {
+        // Usamos totalAmount si existe (editado por admin), sino el amount original
+        const amount = parseFloat(sale.totalAmount || sale.amount) || 0;
+        
+        // Solo sumamos a "Ganancia" si está Aprobada (Completed)
+        if (sale.status === 'Completed') {
+          earnedSum += amount;
+        }
+        
+        // Sumamos a "Pendiente" si el estado es Pending
+        if (sale.status === 'Pending') {
           pendingSum += amount;
         }
       });
 
-      setMetrics({ total: totalSum, pending: pendingSum });
+      setMetrics({ totalEarned: earnedSum, pending: pendingSum });
     };
 
     filterSales();
@@ -86,15 +93,17 @@ const MetricsSummary = () => {
         <button onClick={() => setFilter('day')} disabled={filter === 'day'} style={{ fontWeight: filter === 'day' ? 'bold' : 'normal' }}>Hoy</button>
         <button onClick={() => setFilter('week')} disabled={filter === 'week'} style={{ fontWeight: filter === 'week' ? 'bold' : 'normal' }}>Semana</button>
         <button onClick={() => setFilter('month')} disabled={filter === 'month'} style={{ fontWeight: filter === 'month' ? 'bold' : 'normal' }}>Mes</button>
-        <button onClick={() => setFilter('all')} disabled={filter === 'all'} style={{ fontWeight: filter === 'all' ? 'bold' : 'normal' }}>Todos</button>
+        <button onClick={() => setFilter('all')} disabled={filter === 'all'} style={{ fontWeight: filter === 'all' ? 'bold' : 'normal' }}><DateRangeIcon/></button>
       </div>
 
       <div className="metrics">
-        <div style={{ color: 'var(--color-primary)' }}>
-          Total: ${metrics.total.toLocaleString()}
+        <div style={{ fontSize:"1rem",color: 'var(--color-success, #28a745)' }}>
+          Ganancia Total (Aprobadas):<br/>
+          <span style={{fontSize: '1.5rem'}}>${metrics.totalEarned.toLocaleString()}</span>
         </div>
-        <div style={{ color: 'var(--color-secondary)' }}>
-          Pendiente: ${metrics.pending.toLocaleString()}
+        <div style={{ fontSize:"1rem", color: 'var(--color-warning, #856404)' }}>
+          Por Cobrar (En Espera):<br/>
+          <span style={{fontSize: '1.5rem'}}>${metrics.pending.toLocaleString()}</span>
         </div>
       </div>
     </Card>

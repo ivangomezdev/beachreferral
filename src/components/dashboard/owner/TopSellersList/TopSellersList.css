@@ -2,46 +2,92 @@ ul {
   list-style: none;
 }
 li {
-  padding: 0.5rem 0;
+  padding: 0.75rem 0.5rem;
   border-bottom: 1px solid var(--color-border);
+  display: flex;
+  justify-content: space-between;
+  transition: background-color 0.2s;
+  cursor: pointer; /* Indica que es clickeable */
+}
+
+li:last-child {
+    border-bottom: none;
+}
+
+/* Efecto hover para las filas de vendedores */
+.seller-row:hover {
+    background-color: #f1f3f5;
+    border-radius: 6px;
 }
 
 /* Contenedor de los filtros */
 .filter-buttons {
   display: inline-flex;
-  background-color: #f1f3f5; /* Fondo gris muy clarito para el grupo */
+  background-color: #f1f3f5;
   padding: 4px;
   border-radius: 8px;
-  gap: 4px; /* Espacio pequeño entre botones */
-  margin-bottom: 1.5rem !important; /* Forzar separación con el contenido */
+  gap: 4px;
+  margin-bottom: 1.5rem !important;
 }
 
-/* Estilo base del botón de filtro */
 .filter-buttons button {
   background: transparent;
   border: none;
   padding: 6px 12px;
   font-size: 0.85rem;
   font-weight: 500;
-  color: var(--color-text); /* Usa tu variable de texto o #555 */
+  color: var(--color-text);
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
-/* Hover: Cuando pasas el mouse por una opción no seleccionada */
 .filter-buttons button:hover:not(:disabled) {
   background-color: rgba(0, 0, 0, 0.05);
   color: #000;
 }
 
-/* ESTADO ACTIVO (Seleccionado) */
-/* Usamos :disabled porque en el React pusimos disabled={filter === ...} */
 .filter-buttons button:disabled {
   background-color: white;
-  color: var(--color-primary); /* Azul (o tu color principal) */
+  color: var(--color-primary);
   font-weight: 700 !important;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.08); /* Sombrita suave para resaltar */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.08);
   cursor: default;
-  opacity: 1; /* Quitar la opacidad gris por defecto de los botones disabled */
+  opacity: 1;
+}
+
+/* Estilos para la tabla dentro del Modal */
+.detail-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.detail-table th {
+    text-align: left;
+    border-bottom: 2px solid #eee;
+    padding: 8px;
+    color: var(--color-secondary);
+}
+
+.detail-table td {
+    border-bottom: 1px solid #f0f0f0;
+    padding: 8px;
+}
+
+/* Controles de paginación en el modal */
+.pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+}
+
+.page-indicator {
+    font-size: 0.9rem;
+    color: #666;
 }

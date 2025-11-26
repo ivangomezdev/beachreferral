@@ -1,10 +1,12 @@
+/* File: src/components/dashboard/admin/AllSalesTable/AllSalesTable.jsx
+   Type: uploaded file modification
+*/
 'use client';
 import React, { useEffect, useState, useCallback } from 'react';
 import { collection, getDocs, query, orderBy } from 'firebase/firestore'; 
 import { db } from '@/lib/firebase'; 
 import Card from '@/components/ui/Card/Card';
-import Modal from '@/components/ui/Modal/Modal'; // Solo para wrapper, el contenido está en SaleDetailModal
-import SaleDetailModal from '../SaleDetailModal/SaleDetailModal'; // <--- IMPORTANTE
+import SaleDetailModal from '../SaleDetailModal/SaleDetailModal'; 
 import './AllSalesTable.css';
 
 const AllSalesTable = () => {
@@ -19,14 +21,13 @@ const AllSalesTable = () => {
   const [selectedSale, setSelectedSale] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // 1. Función para Cargar Datos (Reutilizable)
+  // 1. Función para Cargar Datos
   const fetchSales = useCallback(async () => {
     try {
         const q = query(collection(db, "sales"), orderBy("createdAt", "desc"));
         const querySnapshot = await getDocs(q);
         const salesData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         setSales(salesData);
-        // Nota: filteredSales se actualizará por el useEffect de abajo
     } catch (error) {
         console.error("Error cargando ventas:", error);
     }
@@ -70,8 +71,8 @@ const AllSalesTable = () => {
       const term = searchTerm.toLowerCase();
       result = result.filter(sale => 
         (sale.sellerEmail && sale.sellerEmail.toLowerCase().includes(term)) ||
-        (sale.referredBy && sale.referredBy.toLowerCase().includes(term)) ||
-        (sale.folio && sale.folio.toString().includes(term)) // Búsqueda por folio también
+        (sale.reservationFor && sale.reservationFor.toLowerCase().includes(term)) || // Ahora busca por nombre de reserva
+        (sale.folio && sale.folio.toString().includes(term))
       );
     }
 
@@ -122,7 +123,7 @@ const AllSalesTable = () => {
             <div className="filter-group inputs">
                 <input 
                   type="text" 
-                  placeholder="Buscar vendedor, referido o folio..." 
+                  placeholder="Buscar vendedor, cliente o folio..." 
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="search-input"
@@ -145,7 +146,7 @@ const AllSalesTable = () => {
               <table className="sales-table">
                   <thead>
                       <tr>
-                          <th>Vendedor / Referido</th>
+                          <th>Vendedor / Reserva</th> {/* Cambiado título */}
                           <th>Detalles</th>
                           <th>Monto</th>
                           <th>Estado</th>
@@ -157,7 +158,10 @@ const AllSalesTable = () => {
                               <td data-label="Vendedor">
                                   <div className="seller-info">
                                       <span className="seller-name">{formatName(sale.sellerEmail)}</span>
-                                      <span className="referred-by">Ref: {formatName(sale.referredBy)}</span>
+                                      {/* Aquí mostramos Reservation For en lugar de Referred By */}
+                                      <span className="referred-by" style={{color: '#555', fontSize: '0.85rem'}}>
+                                        Reserva: <strong>{sale.reservationFor || 'N/A'}</strong>
+                                      </span>
                                   </div>
                               </td>
                               <td data-label="Detalles">
@@ -184,12 +188,11 @@ const AllSalesTable = () => {
           </div>
       </Card>
 
-      {/* --- USAMOS EL NUEVO COMPONENTE MODAL --- */}
       <SaleDetailModal 
         isOpen={isModalOpen} 
         onClose={handleModalClose} 
         sale={selectedSale}
-        onUpdate={fetchSales} // <--- Pasamos la función para refrescar la tabla
+        onUpdate={fetchSales} 
       />
     </>
   );
