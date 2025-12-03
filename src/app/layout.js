@@ -1,7 +1,7 @@
 import { AuthProvider } from '@/context/AuthContext';
 import './globals.css';
 
-export const metadata = { title: 'Sales App', description: 'Sales Tracker' };
+export const metadata = { title: 'Mandarino RPP', description: 'Sales Tracker' };
 
 export default function RootLayout({ children }) {
   return (
